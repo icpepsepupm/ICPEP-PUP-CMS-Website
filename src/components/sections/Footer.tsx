@@ -4,27 +4,32 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
 import { useCallback } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 const iconStyle = { fontSize: '2rem', marginRight: '1.5rem', color: '#A5A5A9', verticalAlign: 'middle' };
 
 const Footer = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
   // Enhanced smooth scroll with perfect positioning for all viewports
   const handleFooterLinkClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
-    const href = e.currentTarget.getAttribute('href');
+    const href = e.currentTarget.getAttribute('to') || e.currentTarget.getAttribute('href');
     if (!href) return;
     
     // Only handle internal links
     if (href.startsWith('/')) {
-      const currentPath = window.location.pathname + window.location.hash;
+      const currentPath = location.pathname + location.hash;
       
-      // If already on the page, scroll to section or top
-      if (currentPath === href || (href === '/' && window.location.pathname === '/')) {
-        e.preventDefault();
+      // If hash present, handle section scrolling
+      const hashIdx = href.indexOf('#');
+      if (hashIdx !== -1) {
+        const pathPart = href.slice(0, hashIdx);
+        const sectionId = href.slice(hashIdx + 1);
         
-        // If hash present, scroll to section with offset adjustment
-        const hashIdx = href.indexOf('#');
-        if (hashIdx !== -1) {
-          const sectionId = href.slice(hashIdx + 1);
+        // If we're already on the target page, just scroll to section
+        if (location.pathname === pathPart || (pathPart === '/' && location.pathname === '/')) {
+          e.preventDefault();
           const el = document.getElementById(sectionId);
           if (el) {
             // Calculate offset based on viewport size for perfect positioning
@@ -49,12 +54,16 @@ const Footer = () => {
             });
           }
         } else {
-          // Scroll to top
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          // Navigate to page and let React Router handle it
+          navigate(href);
         }
+      } else if (currentPath === href || (href === '/' && location.pathname === '/')) {
+        // If already on the page without hash, scroll to top
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
-  }, []);
+  }, [location.pathname, location.hash, navigate]);
 
   return (
     <>
@@ -221,19 +230,19 @@ const Footer = () => {
         <div style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '1.2rem' }}>Quick Links</div>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: '#A5A5A9', fontSize: '0.9rem', lineHeight: '2.1' }}>
           <li>
-            <a className="footer-link" href="/" style={{ color: '#A5A5A9' }} onClick={handleFooterLinkClick}>Home</a>
+            <Link to="/" className="footer-link" style={{ color: '#A5A5A9', textDecoration: 'none' }} onClick={handleFooterLinkClick}>Home</Link>
           </li>
           <li>
-            <a className="footer-link" href="/about" style={{ color: '#A5A5A9' }} onClick={handleFooterLinkClick}>About Us</a>
+            <Link to="/about" className="footer-link" style={{ color: '#A5A5A9', textDecoration: 'none' }} onClick={handleFooterLinkClick}>About Us</Link>
           </li>
           <li>
-            <a className="footer-link" href="/about#mission-vision-section" style={{ color: '#A5A5A9' }} onClick={handleFooterLinkClick}>Mission & Vision</a>
+            <Link to="/about#mission-vision-section" className="footer-link" style={{ color: '#A5A5A9', textDecoration: 'none' }} onClick={handleFooterLinkClick}>Mission & Vision</Link>
           </li>
           <li>
-            <a className="footer-link" href="/about#officers-section" style={{ color: '#A5A5A9' }} onClick={handleFooterLinkClick}>Officers</a>
+            <Link to="/about#officers-section" className="footer-link" style={{ color: '#A5A5A9', textDecoration: 'none' }} onClick={handleFooterLinkClick}>Officers</Link>
           </li>
           <li>
-            <a className="footer-link" href="/contact" style={{ color: '#A5A5A9' }} onClick={handleFooterLinkClick}>Contacts</a>
+            <Link to="/contact" className="footer-link" style={{ color: '#A5A5A9', textDecoration: 'none' }} onClick={handleFooterLinkClick}>Contacts</Link>
           </li>
         </ul>
       </div>
@@ -242,13 +251,13 @@ const Footer = () => {
         <div style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '1.2rem' }}>Organization</div>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: '#A5A5A9', fontSize: '0.9rem', lineHeight: '2.1' }}>
           <li>
-            <a className="footer-link" href="/about#history-section" style={{ color: '#A5A5A9' }} onClick={handleFooterLinkClick}>Our History</a>
+            <Link to="/about#history-section" className="footer-link" style={{ color: '#A5A5A9', textDecoration: 'none' }} onClick={handleFooterLinkClick}>Our History</Link>
           </li>
           <li>
-            <a className="footer-link" href="https://www.facebook.com/icpepse.pupmanila" target="_blank" rel="noopener noreferrer" style={{ color: '#A5A5A9' }}>Membership</a>
+            <a className="footer-link" href="https://www.facebook.com/icpepse.pupmanila" target="_blank" rel="noopener noreferrer" style={{ color: '#A5A5A9', textDecoration: 'none' }}>Membership</a>
           </li>
           <li>
-            <a className="footer-link" href="/contact#faq-section" style={{ color: '#A5A5A9' }} onClick={handleFooterLinkClick}>FAQs</a>
+            <Link to="/contact#faq-section" className="footer-link" style={{ color: '#A5A5A9', textDecoration: 'none' }} onClick={handleFooterLinkClick}>FAQs</Link>
           </li>
         </ul>
       </div>

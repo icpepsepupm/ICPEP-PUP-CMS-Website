@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Button from '../ui/Button';
 import CrownIcon from '@mui/icons-material/WorkspacePremium';
 
@@ -6,6 +7,8 @@ const Hero = ({ id }: { id?: string }) => {
   const waveRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -445,7 +448,7 @@ const Hero = ({ id }: { id?: string }) => {
               }}
               onClick={() => {
                 // Enhanced navigation with perfect scrolling
-                const currentPath = window.location.pathname;
+                const currentPath = location.pathname;
                 if (currentPath === "/about" || currentPath === "/") {
                   // If already on about page or home, scroll to about section
                   const aboutSection = document.getElementById("about-section");
@@ -463,10 +466,10 @@ const Hero = ({ id }: { id?: string }) => {
                     const targetPosition = Math.max(0, elementTop - offset);
                     window.scrollTo({ top: targetPosition, behavior: 'smooth' });
                   } else {
-                    window.location.href = "/about";
+                    navigate("/about");
                   }
                 } else {
-                  window.location.href = "/about";
+                  navigate("/about");
                 }
               }}
             >
@@ -522,7 +525,7 @@ const Hero = ({ id }: { id?: string }) => {
                 }}
                 onClick={() => {
                   // Enhanced navigation with perfect scrolling
-                  const currentPath = window.location.pathname;
+                  const currentPath = location.pathname;
                   if (currentPath === "/contact" || currentPath === "/") {
                     // If already on contact page or home, scroll to contact section
                     const contactSection = document.getElementById("contact-section");
@@ -540,10 +543,10 @@ const Hero = ({ id }: { id?: string }) => {
                       const targetPosition = Math.max(0, elementTop - offset);
                       window.scrollTo({ top: targetPosition, behavior: 'smooth' });
                     } else {
-                      window.location.href = "/contact";
+                      navigate("/contact");
                     }
                   } else {
-                    window.location.href = "/contact";
+                    navigate("/contact");
                   }
                 }}
               >
