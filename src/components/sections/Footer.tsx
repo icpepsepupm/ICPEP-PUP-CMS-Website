@@ -72,9 +72,15 @@ const Footer = () => {
           .footer-link {
             cursor: pointer;
             transition: text-decoration 0.2s ease;
+            text-decoration: none !important;
           }
           .footer-link:hover {
-            text-decoration: underline;
+            text-decoration: underline !important;
+          }
+          
+          /* Ensure Link components inherit hover styles */
+          a.footer-link:hover {
+            text-decoration: underline !important;
           }
           
           /* Responsive Footer Styles for All Viewports */
